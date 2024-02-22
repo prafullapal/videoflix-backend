@@ -1,2 +1,2 @@
-const DB_NAME = "eBazaar";
+const DB_NAME = "videoFlix";
 module.exports = { DB_NAME };
