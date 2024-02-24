@@ -2,12 +2,14 @@ const express = require("express");
 const router = express.Router();
 
 // Import individual route modules
+const healthCheckRoutes = require("./healthcheck.routes");
 const userRoutes = require("./user.routes");
 const videoRoutes = require("./video.routes");
 const subscriptionRoutes = require("./subscription.routes");
 const commentRoutes = require("./comment.routes");
 const likeRoutes = require("./like.routes");
 
+router.use("/health-check", healthCheckRoutes);
 router.use("/users", userRoutes);
 router.use("/videos", videoRoutes);
 router.use("/c", commentRoutes);
