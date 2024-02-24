@@ -5,26 +5,32 @@ const multerMiddleware = require("../middlewares/multer.middleware");
 const authMiddleware = require("../middlewares/auth.middleware");
 
 // Public routes
-router.get("/", videoController.getAllVideos);
-router.get("/:videoId", videoController.getVideoById);
+router
+  .route("/")
+  .get(videoController.getAllVideos)
+  .post(
+    authMiddleware.verifyJWT, // Adding verifyJWT middleware here
+    multerMiddleware.upload.fields([
+      { name: "videoFile", maxCount: 1 },
+      { name: "thumbnail", maxCount: 1 },
+    ]),
+    videoController.publishAVideo
+  );
 
-// Secured routes
-router.use(authMiddleware.verifyJWT);
+router
+  .route("/:videoId")
+  .get(videoController.getVideoById)
+  .put(
+    authMiddleware.verifyJWT,
+    multerMiddleware.upload.single("thumbnail"),
+    videoController.updateVideo
+  )
+  .delete(authMiddleware.verifyJWT, videoController.deleteVideo);
 
-router.post(
-  "/",
-  multerMiddleware.upload.fields([
-    { name: "videoFile", maxCount: 1 },
-    { name: "thumbnail", maxCount: 1 },
-  ]),
-  videoController.publishAVideo
-);
 router.put(
-  "/:videoId",
-  multerMiddleware.upload.single("thumbnail"),
-  videoController.updateVideo
+  "/:videoId/toggle-publish",
+  authMiddleware.verifyJWT,
+  videoController.togglePublishStatus
 );
-router.delete("/:videoId", videoController.deleteVideo);
-router.put("/:videoId/toggle-publish", videoController.togglePublishStatus);
 
 module.exports = router;

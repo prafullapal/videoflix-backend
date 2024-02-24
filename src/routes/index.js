@@ -5,9 +5,11 @@ const router = express.Router();
 const userRoutes = require("./user.routes");
 const videoRoutes = require("./video.routes");
 const subscriptionRoutes = require("./subscription.routes");
+const commentRoutes = require("./comment.routes");
 
 router.use("/users", userRoutes);
 router.use("/videos", videoRoutes);
 router.use("/subscription", subscriptionRoutes);
+router.use("/comments", commentRoutes);
 
 module.exports = router;
