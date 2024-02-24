@@ -1,15 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const subscriptionController = require("../controllers/subscription.controller");
+const { verifyJWT } = require("../middlewares/auth.middleware");
 
-router.post("/:channelId", subscriptionController.toggleSubscription);
-router.get(
-  "/subscribers/:channelId",
-  subscriptionController.getUserChannelSubscribers
-);
-router.get(
-  "/channels/:subscriberId",
-  subscriptionController.getSubscribedChannels
-);
+router
+  .route("/:channelId")
+  .post(verifyJWT, subscriptionController.toggleSubscription);
+router
+  .route("/subscribers/:channelId")
+  .get(subscriptionController.getUserChannelSubscribers);
+router
+  .route("/channels/:subscriberId")
+  .get(subscriptionController.getSubscribedChannels);
 
 module.exports = router;
