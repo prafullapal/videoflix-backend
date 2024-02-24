@@ -77,7 +77,7 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(500, "Failed to retrieve user data after registration");
   }
 
-  res
+  return res
     .status(201)
     .json(new ApiResponse(200, responseData, "User registered successfully"));
 });
@@ -132,7 +132,7 @@ const logoutUser = asyncHandler(async (req, res) => {
 
   const options = { httpOnly: true, secure: true };
 
-  res
+  return res
     .status(200)
     .clearCookie("accessToken", options)
     .clearCookie("refreshToken", options)
