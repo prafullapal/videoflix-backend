@@ -7,6 +7,7 @@ const {
 } = require("../utils/FileUploader");
 const ApiResponse = require("../utils/ApiResponse");
 const { default: mongoose } = require("mongoose");
+const jwt = require("jsonwebtoken");
 
 const generateAccessandRefreshToken = async (userId) => {
   try {
@@ -134,8 +135,8 @@ const logoutUser = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .clearCookie("accessToken", options)
-    .clearCookie("refreshToken", options)
+    .clearCookie("accessToken")
+    .clearCookie("refreshToken")
     .json(new ApiResponse(200, {}, "User logged Out"));
 });
 
@@ -153,7 +154,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
       process.env.REFRESH_TOKEN_SECRET
     );
 
-    const user = await User.findById(decodedToken._id);
+    const user = await User.findById(decodedToken._id).select("-password");
 
     if (!user) {
       throw new ApiError(401, "Invalid Refresh Token");
@@ -214,7 +215,7 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
 const getCurrentUser = asyncHandler(async (req, res) => {
   return res
     .status(200)
-    .json(200, req.user, "Current User fetched successfully!");
+    .json(new ApiResponse(200, req.user, "Current User fetched successfully!"));
 });
 
 const updateAccountDetails = asyncHandler(async (req, res) => {
@@ -325,7 +326,7 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
         },
         isSubscribed: {
           $cond: {
-            $if: { $in: [req.user?._id, "$subscribers.subscriber"] },
+            if: { $in: [req.user?._id, "$subscribers.subscriber"] },
             then: true,
             else: false,
           },

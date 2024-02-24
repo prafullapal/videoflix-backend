@@ -1,7 +1,7 @@
 {
   "name": "videoflix",
   "version": "0.0.1",
-  "description": "video streaming service",
+  "description": "video sharing platform",
   "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js",

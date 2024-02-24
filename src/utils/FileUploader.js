@@ -1,5 +1,6 @@
 const cloudinary = require("cloudinary").v2;
 const fs = require("fs");
+const { DB_NAME } = require("../CONSTANT");
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -34,7 +35,7 @@ const uploadOnCloudinary = async (localFilePath, folderName) => {
     }
     const response = await cloudinary.uploader.upload(localFilePath, {
       resource_type: "auto",
-      folder: `videoFlix/${folderName}`,
+      folder: `${DB_NAME}/${folderName}`,
     });
     console.log("File uploaded successfully:", response.url);
     deleteLocalFile(localFilePath); // Call the deleteLocalFile function
