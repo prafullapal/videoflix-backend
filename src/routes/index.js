@@ -9,6 +9,7 @@ const subscriptionRoutes = require("./subscription.routes");
 const commentRoutes = require("./comment.routes");
 const likeRoutes = require("./like.routes");
 const playlistRoutes = require("./playlist.routes");
+const dashboardRoutes = require("./dashboard.routes");
 
 router.use("/health-check", healthCheckRoutes);
 router.use("/users", userRoutes);
@@ -17,5 +18,6 @@ router.use("/c", commentRoutes);
 router.use("/subscription", subscriptionRoutes);
 router.use("/likes", likeRoutes);
 router.use("/playlists", playlistRoutes);
+router.use("/router", dashboardRoutes);
 
 module.exports = router;
