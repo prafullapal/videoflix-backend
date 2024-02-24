@@ -24,8 +24,7 @@ app.get("/", (req, res) => {
 });
 
 //import routes
-const userRouter = require("./routes/user.routes");
-
-app.use("/api/v1/users", userRouter);
+const router = require("./routes");
+app.use("/api/v1", router);
 
 module.exports = app;

@@ -1,33 +1,43 @@
 const express = require("express");
-const {
-  registerUser,
-  loginUser,
-  logoutUser,
-  refreshAccessToken,
-} = require("../controllers/user.controller");
-const { upload } = require("../middlewares/multer.middleware");
-const verifyJWT = require("../middlewares/auth.middleware");
+const router = express.Router();
 
-const userRouter = express.Router();
+const userController = require("../controllers/user.controller");
+const authMiddleware = require("../middlewares/auth.middleware");
+const multerMiddleware = require("../middlewares/multer.middleware");
 
-userRouter.route("/register").post(
-  upload.fields([
-    {
-      name: "avatar",
-      maxCount: 1,
-    },
-    {
-      name: "coverImage",
-      maxCount: 1,
-    },
+// Public routes
+router.post(
+  "/register",
+  multerMiddleware.upload.fields([
+    { name: "avatar", maxCount: 1 },
+    { name: "coverImage", maxCount: 1 },
   ]),
-  registerUser
+  userController.registerUser
 );
 
-userRouter.route("/login").post(loginUser);
+router.post("/login", userController.loginUser);
 
-//Secured Routes
-userRouter.route("/logout").post(verifyJWT, logoutUser);
-userRouter.route("/refreshtoken").post(refreshAccessToken);
+// Secured routes
+router.use(authMiddleware.verifyJWT);
 
-module.exports = userRouter;
+router.get("/logout", userController.logoutUser);
+router.post("/refresh-token", userController.refreshAccessToken);
+
+router.get("/current", userController.getCurrentUser);
+router.put("/account", userController.updateAccountDetails);
+router.put(
+  "/avatar",
+  multerMiddleware.upload.single("avatar"),
+  userController.updateUserAvatar
+);
+router.put(
+  "/cover-image",
+  multerMiddleware.upload.single("coverImage"),
+  userController.updateUserCoverImage
+);
+router.put("/change-password", userController.changeCurrentPassword);
+
+router.get("/channel/:username", userController.getUserChannelProfile);
+router.get("/watch-history", userController.getWatchHistory);
+
+module.exports = router;
