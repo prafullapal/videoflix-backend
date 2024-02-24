@@ -2,6 +2,7 @@ const ApiError = require("../utils/ApiError");
 const ApiResponse = require("../utils/ApiResponse");
 const asyncHandler = require("../utils/asyncHandler");
 const Video = require("../models/video.model");
+const Comment = require("../models/comment.model");
 
 const getVideoComments = asyncHandler(async (req, res) => {
   //TODO: get all comments for a video
