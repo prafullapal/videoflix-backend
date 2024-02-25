@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const tweetSchema = new mongoose.Schema(
+const postSchema = new mongoose.Schema(
   {
     owner: {
       type: mongoose.Schema.Types.ObjectId,
@@ -14,5 +14,5 @@ const tweetSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Tweet = mongoose.model("Tweet", tweetSchema);
-module.exports = Tweet;
+const Post = mongoose.model("Post", postSchema);
+module.exports = Post;
